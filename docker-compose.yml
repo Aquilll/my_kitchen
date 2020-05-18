@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_USER: postgres
+      MYSQL_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      RAILS_ENV: development
+      RAILS_MAX_THREADS: 5
+    depends_on:
+      - db
